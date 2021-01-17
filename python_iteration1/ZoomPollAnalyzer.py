@@ -166,3 +166,43 @@ class ZoomPollAnalyzer:
         er = ExcelWriter(out_dict, self.out_dir + '/attendance.xlsx')
         er.write_excel()
         marked_polls = []
+        for poll in new_polls:
+            marks, ans = self.mark_quiz(poll)
+            poll.marked = marks
+            marked_polls.append(poll)
+            poll.selected_options = ans
+        poll_number = 0
+        for pl in marked_polls:
+            questions_dict = {}
+            false_indices = []
+            bad_index = 0
+            q_ids = []
+            q_fnames = []
+            q_lnames = []
+            q_exps = []
+            number_of_q = []
+            success_rate = []
+            success_per = []
+            count = 0
+            for st in pl.students:
+                check = False
+                for i in range(len(pl.students)):
+                    n = fnames[i].lower() + " " + lnames[i].lower()
+                    if self.utils.strip_accents(st.lower()) in self.utils.strip_accents(n):
+                        q_ids.append(ids[i])
+                        q_fnames.append(fnames[i])
+                        q_lnames.append(lnames[i])
+                        q_exps.append(exps[i])
+                        check = True
+                        break
+                if not check:
+                    false_indices.append(bad_index)
+                    q_ids.append("-")
+                    q_fnames.append(st)
+                    q_lnames.append("-")
+                    q_exps.append("-")
+                bad_index += 1
+                correct = [x for x in pl.marked[count] if x == 1]
+                success_rate.append("{} of {}".format(len(correct), len(pl.question_list)))
+                success_per.append("Success Percentage= {} ".format((len(correct) / len(pl.question_list)) * 100))
+                count += 1
