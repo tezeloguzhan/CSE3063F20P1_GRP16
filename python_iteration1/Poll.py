@@ -18,3 +18,20 @@ class Poll:
 
     def set_date(self, date):
         self.date = date
+
+    def insert_question(self, question):
+        self.questions.append(question)
+
+    def insert_student(self, name):
+        self.students[self.utils.strip_accents(name)] = self.questions
+        self.question_list = self.questions
+        self.questions = []
+
+    def if_student_exists(self, name):
+        check = False
+        students = list(self.students.keys())
+        for i in range(len(students)):
+            if self.utils.strip_accents(students[i].lower()) in self.utils.strip_accents(name.lower()):
+                check = True
+                break
+        return check
