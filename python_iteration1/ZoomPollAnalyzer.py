@@ -58,3 +58,34 @@ class ZoomPollAnalyzer:
                 if np.isin("Öğrenci No", cleaned_row):
                     start = True
         return students
+        
+    def populate_polls(self, directory):
+        count = 1
+        polls = []
+        for file_name in glob.iglob('{}/*.csv'.format(directory), recursive=True):
+            df = pandas.read_csv(file_name)
+            poll = Poll()
+            for i in df.itertuples():
+                if len(i[0]) > 3:
+                    data = [np.asarray(i[0])]
+                    for j in range(1, len(i)):
+                        if str(i[j]) != "nan":
+                            data.append(i[j])
+                    tup = []
+                    for obj in data[0]:
+                        tup.append(obj)
+                else:
+                    tup = [i[0][0], i[0][1]]
+                for index in range(1, len(i)):
+                    tup.append(i[index])
+                tup = np.asarray([x for x in tup if str(x) != 'nan'])
+                if poll.if_student_exists(tup[1]):
+                    polls.append(poll)
+                    poll = Poll()
+                for q in range(4, len(tup), 2):
+                    question = Question("".join(tup[q].split()), "".join(tup[q + 1].split()))
+                    poll.insert_question(question)
+                poll.insert_student(self.utils.strip_accents(tup[1]))
+            polls.append(poll)
+            count += 1
+        return polls
