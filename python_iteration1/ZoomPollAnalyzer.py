@@ -107,3 +107,17 @@ class ZoomPollAnalyzer:
                 if pl.if_student_exists(st.fname + " " + st.lname):
                     st.attended_polls += 1
         return students
+
+    def mark_quiz(self, poll):
+        students = poll.students
+        answer_key = poll.answerkey
+        marked_students = []
+        for st in students:
+            marks = []
+            question_list = students[st]
+            for q in question_list:
+                if answer_key.get_answer(str(q.question)) == q.get_answer():
+                    marks.append(1)
+                else:
+                    marks.append(0)
+            marked_students.append(marks)
