@@ -206,3 +206,57 @@ class ZoomPollAnalyzer:
                 success_rate.append("{} of {}".format(len(correct), len(pl.question_list)))
                 success_per.append("Success Percentage= {} ".format((len(correct) / len(pl.question_list)) * 100))
                 count += 1
+            questions_dict['Öğrenci No'] = q_ids
+            questions_dict['Adı'] = q_fnames
+            questions_dict['Soyadı'] = q_lnames
+            questions_dict['Açıklama'] = q_exps
+            poll_name = pl.name
+            bar_counter = 0
+            os.mkdir(self.out_dir + "/Histograms " + poll_name + str(poll_number))
+            for qa in pl.selected_options:
+                ans_keys = []
+                que_keys = []
+                colors = []
+                correct_ans = qa.pop("correct", None)
+                for value in qa.keys():
+                    que_keys.append(value)
+                    ans_keys.append(qa[value])
+                    if value == correct_ans:
+                        colors.append('g')
+                    else:
+                        colors.append('b')
+                qu_dict = {"answers": que_keys, "count": ans_keys}
+                er.set_dict(qu_dict)
+                er.set_path(self.out_dir + "/Histograms " + poll_name + str(poll_number) + "/ Q" + str(
+                    bar_counter + 1) + ".xlsx")
+                er.write_excel()
+                self.utils.plot_histograms(qa, colors, poll_name,
+                                           self.out_dir + "/Histograms " + poll_name + str(poll_number) + "/ Q" + str(
+                                               bar_counter + 1))
+                bar_counter += 1
+            for i in range(len(pl.question_list)):
+                col = []
+                question_number = "Q{}".format(i + 1)
+                q = 0
+                for m in pl.marked:
+                    if i >= len(m) or q in false_indices:
+                        col.append("-")
+                    else:
+                        col.append(m[i])
+                    q += 1
+                questions_dict[question_number] = col
+            for index in range(len(pl.students)):
+                if index in false_indices:
+                    success_rate[index] = "-"
+                    success_per[index] = "-"
+                    number_of_q.append("-")
+                else:
+                    number_of_q.append(len(pl.question_list))
+            questions_dict['Number of Questions'] = number_of_q
+            questions_dict['Success rate'] = success_rate
+            questions_dict['Success Percentage'] = success_per
+            results.append(questions_dict)
+            er.set_dict(questions_dict)
+            er.set_path(self.out_dir + "/" + poll_name + str(poll_number + 1) + ".xlsx")
+            er.write_excel()
+            poll_number += 1
