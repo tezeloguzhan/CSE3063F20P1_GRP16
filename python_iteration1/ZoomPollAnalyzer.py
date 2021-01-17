@@ -121,3 +121,18 @@ class ZoomPollAnalyzer:
                 else:
                     marks.append(0)
             marked_students.append(marks)
+        q_iter = 0
+        chosen_answers = []
+        for ak in answer_key.question_list:
+            qa = {}
+            for st in students:
+                if not q_iter >= len(students[st]):
+                    st_answer = students[st][q_iter].get_answer()
+                    if st_answer in qa:
+                        qa[st_answer] += 1
+                    else:
+                        qa[st_answer] = 1
+            qa["correct"] = ak.get_answer()
+            chosen_answers.append(qa)
+            q_iter += 1
+        return marked_students, chosen_answers
