@@ -136,3 +136,33 @@ class ZoomPollAnalyzer:
             chosen_answers.append(qa)
             q_iter += 1
         return marked_students, chosen_answers
+
+    def start(self):
+        results = []
+        self.utils.clean_output_folder(self.out_dir)
+        answer_keys = self.populate_answer_keys(self.answer_dir)
+        student_list = self.populate_students_list(self.students_dir)
+        polls = self.populate_polls(self.polls_dir)
+        new_polls = self.identify_poll(polls, answer_keys)
+        marked_students = self.mark_attendance(student_list, new_polls)
+        ids = []
+        fnames = []
+        lnames = []
+        exps = []
+        att_polls = []
+        att_rate = []
+        att_per = []
+        for st in marked_students:
+            ids.append(st.id)
+            fnames.append(st.fname)
+            lnames.append(st.lname)
+            exps.append(st.exp)
+            att_polls.append(len(new_polls))
+            att_rate.append("Attended {} of {}".format(st.attended_polls, len(new_polls)))
+            att_per.append("Attended Percentage = {}".format((st.attended_polls / len(new_polls)) * 100))
+        out_dict = {'Öğrenci No': ids, 'Adı': fnames, 'Soyadı': lnames, 'Açıklama': exps,
+                    'Number of Attendance Polls': att_polls,
+                    'Attendance Rate': att_rate, 'Attendance Percentage': att_per}
+        er = ExcelWriter(out_dict, self.out_dir + '/attendance.xlsx')
+        er.write_excel()
+        marked_polls = []
