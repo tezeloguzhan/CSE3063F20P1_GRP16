@@ -21,3 +21,14 @@ class CommonUtils:
         plt.xlabel("Respective Answers and their counts are attached in excel file")
         plt.savefig(path)
         plt.clf()
+
+    def clean_output_folder(self, folder):
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
