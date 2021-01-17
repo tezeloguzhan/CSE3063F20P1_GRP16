@@ -100,3 +100,10 @@ class ZoomPollAnalyzer:
                     return_polls.append(pl)
                     break
         return return_polls
+
+    def mark_attendance(self, students, polls):
+        for st in students:
+            for pl in polls:
+                if pl.if_student_exists(st.fname + " " + st.lname):
+                    st.attended_polls += 1
+        return students
