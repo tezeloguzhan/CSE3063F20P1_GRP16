@@ -2,7 +2,7 @@ import pandas
 
 
 class ExcelWriter:
-    def init(self, dictionary, path):
+    def __init__(self, dictionary, path):
         self.dictionary = dictionary
         self.path = path
 

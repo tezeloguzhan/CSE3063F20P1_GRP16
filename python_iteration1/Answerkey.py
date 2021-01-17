@@ -2,7 +2,7 @@ from Question import Question
 
 
 class Answerkey:
-    def init(self, name):
+    def __init__(self, name):
         self.name = name
         self.question_list = []
 
