@@ -89,3 +89,14 @@ class ZoomPollAnalyzer:
             polls.append(poll)
             count += 1
         return polls
+
+    def identify_poll(self, polls, answer_keys):
+        return_polls = []
+        for pl in polls:
+            for ak in answer_keys:
+                if ak.is_question_present(pl.question_list):
+                    pl.name = ak.name
+                    pl.answerkey = ak
+                    return_polls.append(pl)
+                    break
+        return return_polls
