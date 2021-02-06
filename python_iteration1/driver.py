@@ -23,7 +23,7 @@ class GUI:
     def start(self):
         driver = ZoomPollAnalyzer("answer-keys-directory", "students-list-directory", "polls-directory", "output")
         driver.start()
-        if os.name == 'darwin':
+        if os.name == 'posix':
             self.names = glob.glob(os.getcwd() + "/output/**/*.xlsx", recursive=True)
 
             for i in self.names:
