@@ -65,3 +65,10 @@ class GUI:
         self.png_dict = {}
         combo_values = []
         self.name = glob.glob(path[:-1] + str(int(path[-1]) - 1) + "/*.png", recursive=True)
+        for qe in self.name:
+            png = qe.split("/")[-1]
+            combo_values.append(png.split(".")[0])
+            self.png_dict[png.split(".")[0]] = qe
+        combo_values.sort()
+        self.combo["values"] = combo_values
+        self.combo.bind("<<ComboboxSelected>>", lambda event: self.imageshow1(event))
