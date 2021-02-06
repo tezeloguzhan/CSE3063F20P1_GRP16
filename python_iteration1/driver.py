@@ -54,3 +54,14 @@ class GUI:
             rowvalue = sheetData.values[rownumber]
             rowdata = tuple(rowvalue)
             tree.insert('', 'end', values=rowdata)
+
+    def imagewindow(self):
+        self.imagewindoww = Toplevel(bg='yellow')
+        self.imagewindoww.title("Histograms With Reports")
+        self.imagewindoww.geometry("1000x600")
+        self.combo = ttk.Combobox(self.imagewindoww)
+        self.combo.place(x=50, y=50)
+        path = (os.getcwd() + "/output/Histograms " + self.listee.get(self.listee.curselection())).split(".xlsx")[0]
+        self.png_dict = {}
+        combo_values = []
+        self.name = glob.glob(path[:-1] + str(int(path[-1]) - 1) + "/*.png", recursive=True)
