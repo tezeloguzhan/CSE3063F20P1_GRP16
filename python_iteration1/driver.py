@@ -1,10 +1,9 @@
 from ZoomPollAnalyzer import ZoomPollAnalyzer
 from tkinter import Tk, Listbox, Label, Button, ttk, Toplevel
-import os
 import pandas as pd
 from PIL import Image, ImageTk
 import glob
-
+import os
 
 class GUI:
     def __init__(self, master):
@@ -24,12 +23,22 @@ class GUI:
     def start(self):
         driver = ZoomPollAnalyzer("answer-keys-directory", "students-list-directory", "polls-directory", "output")
         driver.start()
-        self.names = glob.glob(os.getcwd() + "/output/**/*.xlsx", recursive=True)
-        for i in self.names:
-            if "Poll" in i.split("/")[-1]:
-                self.listee.insert(0, i.split("/")[-1])
-            elif "attendance" in i.split("/")[-1]:
-                self.listee.insert(0, i.split("/")[-1])
+        if os.name == 'darwin':
+            self.names = glob.glob(os.getcwd() + "/output/**/*.xlsx", recursive=True)
+
+            for i in self.names:
+                if "Poll" in i.split("/")[-1]:
+                    self.listee.insert(0, i.split("/")[-1])
+                elif "attendance" in i.split("/")[-1]:
+                    self.listee.insert(0, i.split("/")[-1])
+        else:
+
+            self.names = glob.glob(os.getcwd() + "\output/*.xlsx", recursive=True)
+            for i in self.names:
+                if "Poll" in i.split("\\")[-1]:
+                    self.listee.insert(0, i.split("\\")[-1])
+                elif "attendance" in i.split("\\")[-1]:
+                    self.listee.insert(0, i.split("\\")[-1])
 
     def newwindow(self):
         self.window = Tk()
