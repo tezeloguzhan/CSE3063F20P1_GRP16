@@ -45,3 +45,12 @@ class GUI:
         rows = len(sheetData)
         tree = ttk.Treeview(self.window, columns=data, show=["headings"], selectmode='browse')
         tree.place(x=0, y=100)
+
+        for heading in headings:
+            heading = str(heading)
+            tree.column(heading, width=120, anchor='center')
+            tree.heading(heading, text=heading)
+        for rownumber in range(rows):
+            rowvalue = sheetData.values[rownumber]
+            rowdata = tuple(rowvalue)
+            tree.insert('', 'end', values=rowdata)
