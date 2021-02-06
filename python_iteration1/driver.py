@@ -72,3 +72,20 @@ class GUI:
         combo_values.sort()
         self.combo["values"] = combo_values
         self.combo.bind("<<ComboboxSelected>>", lambda event: self.imageshow1(event))
+
+    def imageshow1(self, event):
+        png_file = self.combo.get()
+        self.image = Image.open(self.png_dict[png_file])
+        self.resized = self.image.resize((500, 500), Image.ANTIALIAS)
+        self.photo = ImageTk.PhotoImage(self.resized)
+        self.showimage = Label(self.imagewindoww, image=self.photo)
+        self.showimage.resized = self.photo
+        self.showimage.place(x=50, y=100)
+        excel = self.png_dict[png_file].split(".png")[0] + ".xlsx"
+        xls = pd.ExcelFile(excel)
+        sheetData = pd.read_excel(xls, 'Sheet1')
+        headings = sheetData.columns
+        data = list(headings.values.tolist())
+        rows = len(sheetData)
+        tree = ttk.Treeview(self.imagewindoww, columns=data, show=["headings"], selectmode='browse')
+        tree.place(x=600, y=100)
