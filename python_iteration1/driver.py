@@ -1,5 +1,5 @@
 from ZoomPollAnalyzer import ZoomPollAnalyzer
-from tkinter import Tk, Listbox, Label, Button, filedialog, ttk, Toplevel, PhotoImage, Canvas
+from tkinter import Tk, Listbox, Label, Button, ttk, Toplevel
 import os
 import pandas as pd
 from PIL import Image, ImageTk
