@@ -22,7 +22,6 @@ class Answerkey:
                     break
         return check == len(que)
 
-
     def get_answer(self, que):
         for question in self.question_list:
             if question.get_question() == que:

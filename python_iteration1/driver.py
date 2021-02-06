@@ -33,3 +33,15 @@ class GUI:
                 self.listee.insert(0, i.split("/")[-1])
             elif "attendance" in i.split("/")[-1]:
                 self.listee.insert(0, i.split("/")[-1])
+
+    def newwindow(self):
+        self.window = Tk()
+        self.window.title("Student List")
+        self.window.geometry("1000x600")
+        xls = pd.ExcelFile(os.getcwd() + "/output/" + self.listee.get(self.listee.curselection()))
+        sheetData = pd.read_excel(xls, 'Sheet1')
+        headings = sheetData.columns
+        data = list(headings.values.tolist())
+        rows = len(sheetData)
+        tree = ttk.Treeview(self.window, columns=data, show=["headings"], selectmode='browse')
+        tree.place(x=0, y=100)
